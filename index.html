@@ -203,103 +203,35 @@
 
 
 <!-- Image carousel with interactive mesh -->
+<!-- Image carousel with interactive mesh -->
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <div id="results-carousel" class="carousel results-carousel">
         <div class="item">
           <!-- Your interactive mesh here -->
-          <div id="mesh-container">
-            <!-- Mesh rendering code or interactive mesh viewer component -->
-            <!-- Replace the code below with your interactive mesh viewer component -->
-            <script>
-            // JavaScript code
-            // Include the Three.js library and OBJLoader from a CDN
-            <script src="https://cdn.jsdelivr.net/npm/three@latest"></script>
-            <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/OBJLoader.js"></script>
-
-            // Create a mesh viewer component
-            function createMeshViewer() {
-              // Create a scene
-              const scene = new THREE.Scene();
-
-              // Create a camera
-              const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-              camera.position.z = 5;
-
-              // Create a renderer
-              const renderer = new THREE.WebGLRenderer({ antialias: true });
-              renderer.setSize(window.innerWidth, window.innerHeight);
-              document.getElementById('mesh-container').appendChild(renderer.domElement);
-
-              // Create an OBJ loader
-              const loader = new THREE.OBJLoader();
-
-              // Load the OBJ file
-              loader.load(
-                'static/mesh/rp_mira_posed_019.obj',
-                function (object) {
-                  // Add the loaded mesh to the scene
-                  scene.add(object);
-                },
-                function (xhr) {
-                  console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-                },
-                function (error) {
-                  console.error('An error occurred while loading the OBJ file:', error);
-                }
-              );
-
-              // Animation loop
-              function animate() {
-                requestAnimationFrame(animate);
-
-                // Render the scene with the camera
-                renderer.render(scene, camera);
-              }
-
-              // Start the animation loop
-              animate();
-            }
-
-            // Call the createMeshViewer function to create the mesh viewer component
-            createMeshViewer();
-            <\script>
-            <canvas id="mesh-viewer"></canvas>
-          </div>
+          <div id="mesh-container1"></div>
           <h2 class="subtitle has-text-centered">
             First mesh description.
           </h2>
         </div>
         <div class="item">
           <!-- Your interactive mesh here -->
-          <div id="mesh-container">
-            <!-- Mesh rendering code or interactive mesh viewer component -->
-            <!-- Replace the code below with your interactive mesh viewer component -->
-            <canvas id="mesh-viewer"></canvas>
-          </div>
+          <div id="mesh-container2"></div>
           <h2 class="subtitle has-text-centered">
             Second mesh description.
           </h2>
         </div>
         <div class="item">
           <!-- Your interactive mesh here -->
-          <div id="mesh-container">
-            <!-- Mesh rendering code or interactive mesh viewer component -->
-            <!-- Replace the code below with your interactive mesh viewer component -->
-            <canvas id="mesh-viewer"></canvas>
-          </div>
+          <div id="mesh-container3"></div>
           <h2 class="subtitle has-text-centered">
             Third mesh description.
           </h2>
         </div>
         <div class="item">
           <!-- Your interactive mesh here -->
-          <div id="mesh-container">
-            <!-- Mesh rendering code or interactive mesh viewer component -->
-            <!-- Replace the code below with your interactive mesh viewer component -->
-            <canvas id="mesh-viewer"></canvas>
-          </div>
+          <div id="mesh-container4"></div>
           <h2 class="subtitle has-text-centered">
             Fourth mesh description.
           </h2>
@@ -308,6 +240,68 @@
     </div>
   </div>
 </section>
+
+<!-- Include the Three.js library and OBJLoader from a CDN -->
+<script src="https://cdn.jsdelivr.net/npm/three@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/OBJLoader.js"></script>
+
+<script>
+  // Create a mesh viewer component for each item in the carousel
+  function createMeshViewer1() {
+    // Create a scene
+    const scene = new THREE.Scene();
+
+    // Create a camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+
+    // Create a renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('mesh-container1').appendChild(renderer.domElement);
+
+    // Create an OBJ loader
+    const loader = new THREE.OBJLoader();
+
+    // Load the OBJ file
+    loader.load(
+      'static/mesh/rp_mira_posed_019.obj',
+      function (object) {
+        // Add the loaded mesh to the scene
+        scene.add(object);
+      },
+      function (xhr) {
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+      },
+      function (error) {
+        console.error('An error occurred while loading the OBJ file:', error);
+      }
+    );
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Render the scene with the camera
+      renderer.render(scene, camera);
+    }
+
+    // Start the animation loop
+    animate();
+  }
+
+    // function createMeshViewer2() {
+    //   // Create a scene, camera, renderer, loader, and other necessary code for the second mesh viewer
+    //   // ...
+    // }
+
+    // Call the createMeshViewer functions for each item
+  createMeshViewer1();
+    // createMeshViewer2();
+    // Add additional createMeshViewer functions as needed for more items
+</script>
+</body>
+</html>
 
 
 <!-- Youtube video -->
