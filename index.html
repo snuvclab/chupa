@@ -268,10 +268,18 @@
     // Create an OBJ loader
     const loader = new THREE.OBJLoader();
 
+    // Create a basic material
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
     // Load the OBJ file
     loader.load(
       'static/mesh/rp_mira_posed_019.obj',
       function (object) {
+        object.traverse(function (child) {
+          if (child instanceof THREE.Mesh) {
+              child.material = material;
+            }
+        });
         // Add the loaded mesh to the scene
         scene.add(object);
       },
