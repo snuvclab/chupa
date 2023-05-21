@@ -38,23 +38,22 @@
   <link rel="stylesheet" href="static/css/index.css">
 
 <style>
-  .carousel {
+  .carousel-container {
       display: flex;
-      overflow-x: scroll;
-      scroll-behavior: smooth;
+      flex-wrap: nowrap;
   }
 
-  .item {
-      flex: 0 0 300px;
+  .carousel-item {
+      flex: 0 0 auto;
+      width: 300px;
       margin-right: 10px;
-      border: 1px solid #ccc;
-      padding: 10px;
   }
 
-  .item video {
+  .carousel-item video {
       width: 100%;
-        }
-  </style>
+  }
+</style>
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
