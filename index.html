@@ -37,35 +37,25 @@
   href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 
-<!--
-  <style>
-  .item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .video-container {
-    max-width: 20%;
-    height: auto;
-    margin: 0 10px;
-  }
-  </style>
-  -->
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $("#results-carousel").owlCarousel({
-        items: 4, // Number of items to display at once
-        loop: true, // Enable loop
-        margin: 10, // Spacing between items
-        nav: true, // Show navigation buttons
-        dots: false // Hide navigation dots
-      });
-    });
-  </script>
+  <style>
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+
+    .item {
+      flex: 0 0 25%;
+      scroll-snap-align: center;
+      padding: 0 10px;
+    }
+
+    .item video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
@@ -247,6 +237,19 @@
     </div>
   </div>
 </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#results-carousel").owlCarousel({
+        items: 4, // Number of items to display at once
+        loop: true, // Enable loop
+        margin: 10, // Spacing between items
+        nav: true, // Show navigation buttons
+        dots: false // Hide navigation dots
+      });
+    });
+  </script>
 
 <!-- Paper abstract -->
 <section class="section hero is-light">
