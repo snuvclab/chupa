@@ -33,8 +33,23 @@
   <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <style>
+        .carousel-container {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 50%;
+            margin-right: 10px;
+        }
+
+        .carousel-item video {
+            width: 100%;
+        }
+    </style>
   <link rel="stylesheet" href="static/css/index.css">
 
 <!--
@@ -179,22 +194,22 @@
     <div class="container">
       <div id="results-carousel" class="carousel results-carousel">
         <div class="video">
-            <video poster="" id="steve" autoplay controls muted loop playsinline style width="50%" >
+            <video poster="" id="steve" autoplay controls muted loop playsinline>
               <source src="./static/videos/rp_caren_posed_009_girl_dress.mp4" type="video/mp4">
             </video>
         </div>
         <div class="item">
-            <video poster="" id="chair-tp" autoplay controls muted loop playsinline  width="50%">
+            <video poster="" id="chair-tp" autoplay controls muted loop playsinline>
               <source src="./static/videos/rp_christopher_posed_001_boy_long_sleeves_jeans.mp4" type="video/mp4">
             </video>
         </div>
         <div class="item">
-            <video poster="" id="shiba" autoplay controls muted loop playsinline  width="50%">
+            <video poster="" id="shiba" autoplay controls muted loop playsinline>
               <source src="./static/videos/rp_christopher_posed_003_boy_shirt_jacket.mp4" type="video/mp4">
             </video>
         </div>
         <div class="item">
-            <video poster="" id="fullbody" autoplay controls muted loop playsinline  width="50%">
+            <video poster="" id="fullbody" autoplay controls muted loop playsinline>
               <source src="./static/videos/rp_laura_posed_002.mp4" type="video/mp4">
             </video>
         </div>
