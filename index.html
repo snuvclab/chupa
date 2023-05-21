@@ -37,24 +37,23 @@
   href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <style>
-    .carousel {
+<style>
+  .carousel {
       display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-    }
+      overflow-x: scroll;
+      scroll-behavior: smooth;
+  }
 
-    .item {
-      flex: 0 0 25%;
-      scroll-snap-align: center;
-      padding: 0 10px;
-    }
+  .item {
+      flex: 0 0 300px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+  }
 
-    .item video {
+  .item video {
       width: 100%;
-      height: auto;
-    }
+        }
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -174,7 +173,7 @@
 <section class="hero is-light is-small">
   <div class="hero-body">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel owl-carousel">
+      <div id="results-carousel" class="carousel results-carousel">
         <div class="item">
             <video poster="" id="steve" autoplay controls muted loop playsinline  >
               <source src="./static/videos/rp_caren_posed_009_girl_dress.mp4" type="video/mp4">
@@ -237,19 +236,6 @@
     </div>
   </div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $("#results-carousel").owlCarousel({
-        items: 4, // Number of items to display at once
-        loop: true, // Enable loop
-        margin: 10, // Spacing between items
-        nav: true, // Show navigation buttons
-        dots: false // Hide navigation dots
-      });
-    });
-  </script>
 
 <!-- Paper abstract -->
 <section class="section hero is-light">
