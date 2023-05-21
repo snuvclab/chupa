@@ -53,26 +53,8 @@
   </style>
   -->
 
-<style>
-  .carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    width: 100%;
-  }
-
-  .item {
-    flex: 0 0 25%;
-    scroll-snap-align: start;
-    padding: 0 10px;
-    width: 100%;
-  }
-
-  .item video {
-    width: 100%;
-    height: auto;
-  }
-</style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
@@ -191,7 +173,7 @@
 <section class="hero is-light is-small">
   <div class="hero-body">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
+      <div id="results-carousel" class="carousel results-carousel owl-carousel">
         <div class="item">
             <video poster="" id="steve" autoplay controls muted loop playsinline  >
               <source src="./static/videos/rp_caren_posed_009_girl_dress.mp4" type="video/mp4">
