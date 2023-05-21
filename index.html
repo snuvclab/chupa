@@ -51,6 +51,27 @@
     </style>
   <link rel="stylesheet" href="static/css/index.css">
 
+  <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+    <style>
+        .title-with-favicon {
+            position: relative;
+            display: inline-block;
+            margin-left: 30px; /* Adjust the margin as needed */
+        }
+
+        .title-with-favicon::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -20px; /* Adjust the position as needed */
+            transform: translateY(-50%);
+            width: 16px; /* Adjust the width as needed */
+            height: 16px; /* Adjust the height as needed */
+            background: url("static/images/favicon.ico") no-repeat center center;
+            background-size: contain;
+        }
+    </style>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
@@ -67,7 +88,7 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <h1 class="title is-1 publication-title">
-              <em>Chupa</em> : Carving 3D Clothed Humans<br>from Skinned Shape Priors<br>using 2D Diffusion Probabilistic Models
+              <span class="title-with-favicon"><em>Chupa</em></span> : Carving 3D Clothed Humans<br>from Skinned Shape Priors<br>using 2D Diffusion Probabilistic Models
             </h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
