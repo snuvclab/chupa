@@ -172,28 +172,51 @@
 <!-- Borrowed from Nerfies -->
 <section class="hero is-light is-small">
   <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item">
-            <video poster="" id="steve" autoplay controls muted loop playsinline  >
-              <source src="./static/videos/rp_caren_posed_009_girl_dress.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="item">
-            <video poster="" id="chair-tp" autoplay controls muted loop playsinline  >
-              <source src="./static/videos/rp_christopher_posed_001_boy_long_sleeves_jeans.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="item">
-            <video poster="" id="shiba" autoplay controls muted loop playsinline  >
-              <source src="./static/videos/rp_christopher_posed_003_boy_shirt_jacket.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="item">
-            <video poster="" id="fullbody" autoplay controls muted loop playsinline  >
-              <source src="./static/videos/rp_laura_posed_002.mp4" type="video/mp4">
-            </video>
-        </div>
+      <div class="container">
+          <div id="results-carousel" class="carousel results-carousel">
+              <div class="carousel-container">
+                  <div class="item">
+                      <video poster="" id="steve" autoplay controls muted loop playsinline>
+                          <source src="./static/videos/rp_caren_posed_009_girl_dress.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                  <div class="item">
+                      <video poster="" id="chair-tp" autoplay controls muted loop playsinline>
+                          <source src="./static/videos/rp_christopher_posed_001_boy_long_sleeves_jeans.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                  <div class="item">
+                      <video poster="" id="shiba" autoplay controls muted loop playsinline>
+                          <source src="./static/videos/rp_christopher_posed_003_boy_shirt_jacket.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                  <div class="item">
+                      <video poster="" id="fullbody" autoplay controls muted loop playsinline>
+                          <source src="./static/videos/rp_laura_posed_002.mp4" type="video/mp4">
+                      </video>
+                  </div>
+              </div>
+              <div class="carousel-navigation is-overlay">
+                  <div class="carousel-nav-left">
+                      <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                  </div>
+                  <div class="carousel-nav-right">
+                      <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel/dist/js/bulma-carousel.min.js"></script>
+    <script>
+        // Initialize the carousel
+        var carousels = bulmaCarousel.attach('.carousel', {
+            slidesToScroll: 1,
+            slidesToShow: 3
+        });
+  </script>
         <!--
         <div class="item item-blueshirt">
           <video poster="" id="blueshirt" autoplay controls muted loop playsinline>
@@ -232,11 +255,6 @@
           </video>
         </div>
         -->
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Paper abstract -->
 <section class="section hero is-light">
   <div class="container is-max-desktop">
