@@ -1,0 +1,11 @@
+/data/
+/nvdiffrast/
+/out/
+/temp/
+/.venv/
+/textured_mesh/
+/stuff/
+*.pyc
+co3d_nds_recon.py
+diffusion_nds_recon.py
+mesh_vertices_texturing.py

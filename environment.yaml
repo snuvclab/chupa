@@ -1,0 +1,54 @@
+name: chupa
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda
+  - pip
+  - pip:
+    - pytorch-lightning==1.4.2
+    - packaging==21.3
+    - protobuf==3.20.*
+    - torchmetrics==0.6.0
+    - gradio
+    - torchgeometry
+    - torchdiffeq
+    - imageio
+    - imageio-ffmpeg
+    - opencv-python
+    - numpy
+    - meshzoo
+    - pymeshlab
+    - pillow
+    - scikit-image
+    - tensorboard
+    - tqdm
+    - trimesh
+    - albumentations
+    - pudb 
+    - omegaconf
+    - test-tube
+    - streamlit
+    - einops
+    - torch-fidelity
+    - transformers
+    - xformers
+    - PyOpenGL
+    - pygifsicle
+    - jsonmerge
+    - scipy
+    - resize_right
+    - clip
+    - clean-fid
+    - kornia
+    - smplx
+    - setuptools
+    - git+https://github.com/YuliangXiu/rembg.git
+    - git+https://github.com/NVlabs/nvdiffrast.git
+    - -e .

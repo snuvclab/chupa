@@ -1,0 +1,69 @@
+dataset:
+  data_dir: data/
+  dataset_type: renderpeople
+  subject: null
+
+chupa:
+  seed: 42
+  res: 512
+  use_side_loss : true
+  use_resample: true
+  use_closeup: true
+  initial_angle: 0
+  angle_step: 10
+  resample_T : 0.02
+  n_resample : 2
+  resample_T_face : 0.02
+  n_resample_face : 2
+  use_text: true
+  prompt: null
+  resample_T_from_text : 0.1
+  n_resample_from_text : 5
+  device: cuda:0
+  output_root: results/
+  save_intermediate: true
+  smpl_related_dir: src/smpl_related/
+  smpl_type: smplx
+  gradio: false
+
+diffusion:
+  dual: true
+  root_path: checkpoints
+  body_vq_path: autoencoder/vq-f4-c4/epoch000999.ckpt
+  body_task: normal_ldm/dualbody-rpth-4dim
+  body_ckpt: epoch000499.ckpt
+  face_vq_path : autoencoder/vq-f4-c3/vq-f4.ckpt
+  face_task : normal_ldm/dualface-rpth-3dim
+  face_ckpt: epoch000299.ckpt
+  bodytext_task: "normal_ldm/dualbody-text-rp-3dim"
+  bodytext_ckpt: "epoch000299.ckpt"
+  cfg_weight: 2.0
+  sampling: ddpm
+  half: false
+
+nds:
+  camera: orthographic
+  initial_angle: 0
+  angle_step: 10
+  with_closeup: true
+  up_axis : 1  # y-axis
+  align_yaw: True
+  tpose: False
+  initial_num_vertex: 3000
+  start_iteration: 0
+  iterations: 2000
+  lr_vertices: 0.001
+  upsample_start: 500
+  upsample_interval: 500
+  save_frequency: 500
+  visualization_frequency: 500
+  visualization_views: []
+  view_sampling_mode: random
+  views_per_iter: 1
+  optim_only_visible: true
+  loss:
+    weight_mask: 2.0
+    weight_normal: 0.1
+    weight_laplacian: 40.0
+    weight_shading: 1.0
+    weight_side: 0.1
