@@ -17,7 +17,7 @@
 from renderer.mesh_util import SMPLX
 from renderer.render_utils import face_vertices
 import numpy as np
-import smpl_related.smplx as smplx
+import smplx as smplx
 import trimesh
 import torch
 import torch.nn.functional as F

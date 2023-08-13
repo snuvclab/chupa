@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import trimesh
-from smpl_related.smplx.body_models import SMPL, SMPLX
+from smplx.body_models import SMPL, SMPLX
 
 def get_yaw_inverse_mat(rot_vec):
         angle = np.linalg.norm(rot_vec + 1e-8)

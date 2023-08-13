@@ -26,7 +26,7 @@ from renderer.gl.init_gl import initialize_GL_context
 from renderer.gl.prt_render import PRTRender
 from renderer.gl.color_render import ColorRender
 from renderer.camera import Camera
-from smpl_related.smplx.body_models import SMPLX, SMPL
+from smplx.body_models import SMPLX, SMPL
 from smpl_related.utils import get_yaw_inverse_mat, load_smpl
 
 def pil_concat_h(pil_list, h=512, w=512):

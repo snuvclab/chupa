@@ -25,7 +25,7 @@ from torchvision import transforms
 from PIL import Image
 import pymeshlab
 
-from smpl_related.smplx.body_models import SMPL, SMPLX
+from smplx.body_models import SMPL, SMPLX
 from smpl_related.utils import get_yaw_inverse_mat, load_smpl
 import trimesh
 

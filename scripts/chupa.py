@@ -25,16 +25,18 @@ from ldm.utils.data_helpers import instantiate_from_config
 from normal_nds.reconstruct import NormalNDS 
 from normal_nds.nds.modules import ViewSampler
 from normal_nds.nds.utils import read_mesh, write_mesh, load_smpl_info
-from bodymocap.body_mocap_api import BodyMocap
-sys.path.append('third_party/frankmocap/detectors/body_pose_estimator')
-from bodymocap.body_bbox_detector import BodyPoseEstimator
-from bodymocap import constants
-from bodymocap.utils.imutils import crop, crop_bboxInfo, process_image_bbox, process_image_keypoints, bbox_from_keypoints
 
 from img_utils import (to_world, to_cam, to_cam_B, fliplr_nml, 
                        to_rgba, to_pil, pil_concat_h, pil_concat_v,
                        frontback_img, merge_frontback)
 
+if 'gradio_test.py' in sys.argv[0]:
+    from bodymocap.body_mocap_api import BodyMocap
+    sys.path.append('third_party/frankmocap/detectors/body_pose_estimator')
+    from bodymocap.body_bbox_detector import BodyPoseEstimator
+    from bodymocap import constants
+    from bodymocap.utils.imutils import crop, crop_bboxInfo, process_image_bbox, process_image_keypoints, bbox_from_keypoints
+    
 class Chupa():
     def __init__(self, config : omegaconf.dictconfig.DictConfig):
         for key, value in config.chupa.items():
