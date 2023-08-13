@@ -76,7 +76,7 @@ class ImageEditor(nn.Module):
                 x = self.model.decode_first_stage(x)[0]
             return x
         
-    def forward_wfront(self, i_normal_front, image, cfg=7.5, steps=100, seed=23, repeat_sample=4, jump_length=4):
+    def forward_wfront(self, i_normal_front, image, cfg=7.5, steps=100, seed=23, repeat_sample=5, jump_length=0.05):
         assert self.model_type == "ddpm", "Model should be dual model, not text"
 
         front_mask = (i_normal_front[2, :, :]>=0).float()
@@ -104,15 +104,16 @@ class ImageEditor(nn.Module):
                 "text_cfg_scale": cfg,
             } 
             sigmas = self.model_wrap.get_sigmas(steps)
+            jump_steps = int(steps * jump_length)
 
             input_shape = list(cond['c_concat'][0].shape)
             input_shape[1] = self.channels
             img = torch.randn(input_shape, device=self.device) * sigmas[0]
             
             s_in = img.new_ones([img.shape[0]])
-            for i in tqdm(range(0, len(sigmas) - 1, jump_length)):
+            for i in tqdm(range(0, len(sigmas) - 1, jump_steps)):
                 for u in range(1, repeat_sample+1):
-                    for j in reversed(range(jump_length)):
+                    for j in reversed(range(jump_steps)):
                         denoised = self.model_wrap_cfg(img, sigmas[i+j] * s_in, **extra_args)
                         sigma_down, sigma_up = K.sampling.get_ancestral_step(sigmas[i+j], sigmas[i+j+1], eta=1.)
                         d = K.sampling.to_d(img, sigmas[i+j], denoised)
@@ -126,7 +127,7 @@ class ImageEditor(nn.Module):
                         img[:, h_c:] = mask_enc[:, 1:2] * img_orig[:, h_c:] + (1. - mask_enc[:, 1:2]) * img[:, h_c:]
 
                     if u < repeat_sample:
-                        img = img + torch.randn_like(normal_enc) * (sigmas[i]-sigmas[i+jump_length])
+                        img = img + torch.randn_like(normal_enc) * (sigmas[i]-sigmas[i+jump_steps])
 
             masked_x_front = self.model.decode_first_stage(img[:,:h_c,:,:])
             masked_x_back = self.model.decode_first_stage(img[:,h_c:,:,:])

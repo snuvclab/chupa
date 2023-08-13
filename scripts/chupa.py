@@ -140,7 +140,8 @@ class Chupa():
         return initial_normal
 
     def difftext_sample(self, img_t, text, negative_text, 
-                        seed, steps=50, cfg_scale=7.5, image_cfg_scale=1.5):
+                        seed, steps=100, cfg_scale=7.5, image_cfg_scale=1.5,
+                        resample_steps=20, n_resample=5):
         assert self.use_text or self.gradio, "Text-based model not loaded. Please check your arguments."
         initial_normal_front = self.text_editor(
             img_t[:3, :, :], text, negative_text,
@@ -148,12 +149,12 @@ class Chupa():
 
         initial_normal = self.model_body.forward_wfront(
             initial_normal_front, img_t[:4, :, :], 
-            cfg=cfg_scale, steps=steps*2, seed=seed, 
-            repeat_sample=5, jump_length=5
+            cfg=cfg_scale, steps=steps, seed=seed, 
+            repeat_sample=5, jump_length=0.05
         )
         normal_resample = self.model_body.resample(
             initial_normal, img_t[:4, :, :], 
-            cfg=cfg_scale, steps=int(steps*0.5), seed=seed, repeat=5
+            cfg=cfg_scale, steps=resample_steps, seed=seed, repeat=n_resample
         )
 
         return normal_resample
@@ -217,25 +218,6 @@ class Chupa():
             mesh.vertices = mesh.vertices @ self.normal_nds.yaw_inverse_mat
 
         return body_rendered_normal_maps
-        
-    # def render_dual(self, mesh, view_angle, closeup=False):
-    #     ch_slice = self.ch_slice_face if closeup else self.ch_slice_body
-
-    #     # front
-    #     normal_F_world, vis_mask_F  = \
-    #         self.normal_nds.render_target_view(mesh, view_angle, closeup=closeup)
-    #     normal_F_cam = to_cam(normal_F_world.permute(2, 0, 1), view_angle)
-
-    #     # back
-    #     normal_B_world, vis_mask_B  = \
-    #         self.normal_nds.render_target_view(mesh, (view_angle + 180) % 360, closeup=closeup)
-    #     normal_B_cam = to_cam(normal_B_world.permute(2, 0, 1), (view_angle + 180) % 360)
-    #     normal_B_cam_flipped = fliplr_nml(normal_B_cam)
-        
-    #     normal_cam = torch.cat([normal_F_cam[:ch_slice], 
-    #                             normal_B_cam_flipped[:ch_slice]], dim=0)
-
-    #     return normal_cam
 
     def forward_gradio(self, input_image, seed=None,
                     steps=20, cfg_scale=2.0, image_cfg_scale=1.5,
@@ -250,9 +232,9 @@ class Chupa():
 
     def forward(self, smpl_param_path=None, input_image=None, subject=None, seed=None,
                 steps=20, cfg_scale=2.0, image_cfg_scale=1.5,
-                use_text=None, prompt="", negative_prompt="", 
                 use_resample=None, resample_T=0.02, n_resample=2, 
-                use_closeup=None, resample_T_face=0.02, n_resample_face=2):
+                use_closeup=None, resample_T_face=0.02, n_resample_face=2,
+                use_text=None, prompt="", negative_prompt=""):
 
         assert not (smpl_param_path is None and input_image is None), \
                    'You need to specify smpl parameter or input image'        
@@ -322,8 +304,10 @@ class Chupa():
         smpl_body_front = smpl_body_images[angle_to_idx[self.initial_angle]]
         with torch.no_grad():
             if use_text:
+                text_resample_steps = int(self.model_body.model.num_timesteps * self.resample_T_from_text)
                 initial_normal = self.difftext_sample(smpl_body_front, prompt, negative_prompt, 
-                                    seed, steps, cfg_scale=cfg_scale, image_cfg_scale=image_cfg_scale)[0]
+                                    seed, steps=steps, cfg_scale=cfg_scale, image_cfg_scale=image_cfg_scale,
+                                    resample_steps=text_resample_steps, n_resample=self.n_resample_from_text)[0]
             else:
                 initial_normal = self.diff_sample(smpl_body_front, seed=seed, steps=steps)[0]
 

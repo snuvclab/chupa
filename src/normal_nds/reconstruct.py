@@ -309,10 +309,12 @@ class NormalNDS(nn.Module):
                 lr_vertices *= 0.25
                 loss_weights['side'] *= 0.25
 
-        save_normal_path = output_dir / 'normals'
-        save_normal_path.mkdir(exist_ok=True)
-        save_mesh_path = output_dir / 'meshes'
-        save_mesh_path.mkdir(exist_ok=True)
+        if (self.visualization_frequency > 0):
+            save_normal_path = output_dir / 'normals'
+            save_normal_path.mkdir(exist_ok=True)
+        if (self.save_frequency > 0):
+            save_mesh_path = output_dir / 'meshes'
+            save_mesh_path.mkdir(exist_ok=True)
 
         # Configure the view sampler
         view_sampler = ViewSampler(views=self.views, **self.view_sampler_args)
@@ -357,12 +359,13 @@ class NormalNDS(nn.Module):
                 if not self.optim_only_visible:
                     optimizer_vertices = torch.optim.Adam([vertex_offsets], lr=lr_vertices)
 
-                with torch.no_grad():
-                    mesh_for_writing = self.space_normalization.denormalize_mesh(initial_mesh.detach().to('cpu'))
-                    if self.yaw_inverse_mat is not None:
-                        mesh_for_writing.vertices = mesh_for_writing.vertices @ self.yaw_inverse_mat 
-                    mesh_for_writing.vertices /= self.scale
-                    write_mesh(save_mesh_path / f"{num_views}views_{iteration:04d}_upsample.obj", mesh_for_writing)
+                if (self.save_frequency > 0) and ((iteration == 0) or ((iteration + 1) % self.save_frequency == 0)):
+                    with torch.no_grad():
+                        mesh_for_writing = self.space_normalization.denormalize_mesh(initial_mesh.detach().to('cpu'))
+                        if self.yaw_inverse_mat is not None:
+                            mesh_for_writing.vertices = mesh_for_writing.vertices @ self.yaw_inverse_mat 
+                        mesh_for_writing.vertices /= self.scale
+                        write_mesh(save_mesh_path / f"{num_views}views_{iteration:04d}_upsample.obj", mesh_for_writing)
 
             # Deform the initial mesh
             mesh = initial_mesh.with_vertices(initial_mesh.vertices + vertex_offsets)
@@ -437,7 +440,7 @@ class NormalNDS(nn.Module):
                         normal_image = (0.5*(normal + 1)) * debug_gbuffer["mask"] + (1-debug_gbuffer["mask"])  # global normal
                         plt.imsave(save_normal_path / f'{num_views}views_{(iteration + 1):04d}_{debug_view.view_angle}.png', normal_image.cpu().numpy())
 
-            if (self.visualization_frequency > 0) and ((iteration == 0) or ((iteration + 1) % self.visualization_frequency == 0)):
+            if (self.save_frequency > 0) and ((iteration == 0) or ((iteration + 1) % self.save_frequency == 0)):
                 with torch.no_grad():
                     mesh_for_writing = self.space_normalization.denormalize_mesh(mesh.detach().to('cpu'))
                     if self.yaw_inverse_mat is not None:

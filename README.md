@@ -27,7 +27,7 @@ bash scripts/fetch_data.sh
 ```
 
 
-### Install frankmocap (for running Gradio)
+### Install frankmocap (Optional, for running Gradio)
 ```
 mkdir third_party
 cd third_party
