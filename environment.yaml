@@ -16,13 +16,14 @@ dependencies:
     - packaging==21.3
     - protobuf==3.20.*
     - torchmetrics==0.6.0
+    - numpy==1.23.1
+    - chumpy
     - gradio
     - torchgeometry
     - torchdiffeq
     - imageio
     - imageio-ffmpeg
     - opencv-python
-    - numpy
     - meshzoo
     - pymeshlab
     - pillow

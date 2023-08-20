@@ -6,6 +6,9 @@
 
 This is the official code for the ICCV 2023 paper "Chupa: Carving 3D Clothed Humans from Skinned Shape Priors using 2D Diffusion Probabilistic Models", a 3D generation pipeline specialized on generating realistic human digital avatars.
 
+## News
+- [2023/08/20] Update text-based normal map generation checkpoint (1000 epochs).
+
 ## Installation
 Setup the environment using conda.
 ```
@@ -53,7 +56,7 @@ Training code will be released soon.
 At the moment, you can get the pretrained checkpoints by running the commands below.
 The checkpoints include autoencoder checkpoints from [Latent Diffusion Model](https://github.com/CompVis/latent-diffusion).
 ```
-gdown https://drive.google.com/uc?id=1F2104jQM_bN_GC964sOXZ4-QEatqPfuo  # Models for dual normal map generation
+gdown https://drive.google.com/uc?id=1TX0GIMtWKOa-HJ2CILGheV0zX-RSp8LG  # Models for dual normal map generation
 unzip checkpoints.zip && rm checkpoints.zip
 mkdir checkpoints/autoencoder/vq-f4-c3 && cd checkpoints/autoencoder/vq-f4-c3
 wget https://ommer-lab.com/files/latent-diffusion/vq-f4.zip  # Autoencoder checkpoint from latent diffusion
