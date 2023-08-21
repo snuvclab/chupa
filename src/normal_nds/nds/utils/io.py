@@ -101,7 +101,7 @@ def load_smpl_info(smpl_param_path, smpl_type='smplx', gender='neutral', smpl_re
     if smpl_type == 'smpl':
         with open(smpl_seg_path) as f:
             smpl_segmentation = json.load(f)
-        smpl_info['head_idxs'] = smpl_segmentation['head'] + smpl_segmentation['neck']
+        smpl_info['face_idxs'] = smpl_segmentation['head'] + smpl_segmentation['neck']
     elif smpl_type == 'smplx':
         smpl_info['face_idxs'] = np.load(smpl_related_dir / 'smpl_data' / 'FLAME_SMPLX_vertex_ids.npy')
         smpl_info['eyeball_fid'] = np.load(smpl_related_dir / 'smpl_data' / 'eyeball_fid.npy')

@@ -394,8 +394,9 @@ if __name__ == '__main__':
     args = OmegaConf.merge(config, config_cli)  # update config from command line
 
     data_dir = Path(args.dataset.data_dir) / args.dataset.dataset_type
+    smpl_type = args.chupa.smpl_type
     if args.dataset.subject is None:
-        subjects = [subject.stem for subject in (data_dir / 'smplx').glob('*.pkl')]
+        subjects = [subject.stem for subject in (data_dir / smpl_type).glob('*.pkl')]
     else:
         subjects = [args.dataset.subject]
 
@@ -403,5 +404,5 @@ if __name__ == '__main__':
 
     for subject in sorted(subjects):
         print(subject)
-        smpl_param_path = data_dir / 'smplx' / f'{subject}.pkl'
+        smpl_param_path = data_dir / smpl_type / f'{subject}.pkl'
         chupa.forward(smpl_param_path=smpl_param_path, subject=subject)
