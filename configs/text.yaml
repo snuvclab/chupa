@@ -35,8 +35,8 @@ diffusion:
   face_vq_path : autoencoder/vq-f4-c3/vq-f4.ckpt
   face_task : normal_ldm/dualface-rpth-3dim
   face_ckpt: epoch000299.ckpt
-  bodytext_task: "normal_ldm/dualbody-text-rp-3dim"
-  bodytext_ckpt: "epoch000299.ckpt"
+  bodytext_task: "normal_ldm/dualbody-text-rpth-3dim"
+  bodytext_ckpt: "epoch000999.ckpt"
   cfg_weight: 2.0
   sampling: ddpm
   half: false
