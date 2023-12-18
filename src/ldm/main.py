@@ -1,4 +1,6 @@
 import argparse, os, sys, datetime, glob
+import torch
+torch.set_float32_matmul_precision('medium')  # This is only useful if you have GPUS with Tensor cores.
 
 from packaging import version
 from omegaconf import OmegaConf
@@ -113,11 +115,11 @@ if __name__ == "__main__":
 
         for k in nondefault_trainer_args(opt):
             trainer_config[k] = getattr(opt, k)
-        if not "gpus" in trainer_config:
+        if not "devices" in trainer_config:
             del trainer_config["accelerator"]
             cpu = True
         else:
-            gpuinfo = trainer_config["gpus"]
+            gpuinfo = trainer_config["devices"]
             print(f"Running on GPUs {gpuinfo}")
             cpu = False
         trainer_opt = argparse.Namespace(**trainer_config)
@@ -145,7 +147,7 @@ if __name__ == "__main__":
         # configure learning rate
         bs, base_lr = config.data.params.batch_size, config.model.base_learning_rate
         if not cpu:
-            ngpu = len(lightning_config.trainer.gpus.strip(",").split(','))
+            ngpu = len(lightning_config.trainer.devices.strip(",").split(','))
         else:
             ngpu = 1
         if 'accumulate_grad_batches' in lightning_config.trainer:
@@ -292,7 +294,8 @@ if __name__ == "__main__":
                 raise
         if not opt.no_test and not trainer.interrupted:
             trainer.test(model, data)
-    except Exception:
+    except Exception as e:
+        print(e)
         if opt.debug and trainer.global_rank == 0:
             try:
                 import pudb as debugger

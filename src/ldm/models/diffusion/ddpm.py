@@ -358,10 +358,23 @@ class DDPM(pl.LightningModule):
         return self.p_losses(x, t, *args, **kwargs)
 
     def get_input(self, batch, k):
-        x = batch[k]
-        if len(x.shape) == 3:
-            x = x[..., None]
-        x = rearrange(x, 'b h w c -> b c h w')
+        if k == "normal_dual":
+            x1 = batch["normal_F"]
+            if len(x1.shape) == 3:
+                x1 = x1[None, ...]
+            x1 = rearrange(x1, 'b h w c -> b c h w')
+            x2 = batch["normal_B"]
+            if len(x1.shape) == 3:
+                x2 = x2[None, ...]
+            x2 = rearrange(x2, 'b h w c -> b c h w')
+            B, C, H, W = x1.shape
+            x = torch.cat([x1, x2], dim=1)
+            x = x.reshape(B * 2, C, H, W)
+        else:
+            x = batch[k]
+            if len(x.shape) == 3:
+                x = x[..., None]
+            x = rearrange(x, 'b h w c -> b c h w')
         x = x.to(memory_format=torch.contiguous_format).float()
         return x
 
@@ -373,7 +386,7 @@ class DDPM(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         loss, loss_dict = self.shared_step(batch)
 
-        self.log_dict(loss_dict, prog_bar=True, logger=True, on_step=False, on_epoch=True)
+        self.log_dict(loss_dict, prog_bar=True, logger=True, on_step=False, on_epoch=True, sync_dist=True)
         self.log("global_step", self.global_step, prog_bar=True, logger=True, on_step=True, on_epoch=False)
 
         if self.use_scheduler:
@@ -388,8 +401,8 @@ class DDPM(pl.LightningModule):
         with self.ema_scope():
             _, loss_dict_ema = self.shared_step(batch)
             loss_dict_ema = {key + '_ema': loss_dict_ema[key] for key in loss_dict_ema}
-        self.log_dict(loss_dict_no_ema, prog_bar=False, logger=True, on_step=False, on_epoch=True)
-        self.log_dict(loss_dict_ema, prog_bar=False, logger=True, on_step=False, on_epoch=True)
+        self.log_dict(loss_dict_no_ema, prog_bar=False, logger=True, on_step=False, on_epoch=True, sync_dist=True)
+        self.log_dict(loss_dict_ema, prog_bar=False, logger=True, on_step=False, on_epoch=True, sync_dist=True)
 
     def on_train_batch_end(self, *args, **kwargs):
         if self.use_ema:
@@ -689,6 +702,9 @@ class LatentDiffusion(DDPM):
         x = x.to(self.device)
         encoder_posterior = self.encode_first_stage(x)
         z = self.get_first_stage_encoding(encoder_posterior).detach()
+        if k == "normal_dual":
+            B, C, H, W = z.shape
+            z = z.reshape(B // 2, 2 * C, H, W)
 
         if self.model.conditioning_key is not None:
             if cond_key is None:
@@ -726,6 +742,8 @@ class LatentDiffusion(DDPM):
                 c = {'pos_x': pos_x, 'pos_y': pos_y}
         out = [z, c]
         if return_first_stage_outputs:
+            if k == "normal_dual":
+                z = z.reshape(B,C,H,W)
             xrec = self.decode_first_stage(z)
             out.extend([x, xrec])
         if return_original_cond:

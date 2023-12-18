@@ -1,4 +1,4 @@
-# Chupa
+# Chupa (ICCV 2023, Oral)
 
 ## [Project Page](https://snuvclab.github.io/chupa/) &nbsp;|&nbsp; [Paper](https://arxiv.org/pdf/2305.11870.pdf) 
 
@@ -8,6 +8,7 @@ This is the official code for the ICCV 2023 paper "Chupa: Carving 3D Clothed Hum
 
 ## News
 - [2023/08/20] Update text-based normal map generation checkpoint (1000 epochs).
+- [2023/12/18] Release training script.
 
 ## Installation
 Setup the environment using conda.
@@ -50,13 +51,69 @@ setup(
 pip install -e .
 ```
 
-## Training
-Training code will be released soon.
+## Training (23/12/18 updated)
+We provide a sample training script using THuman2.0 dataset since we cannot share RenderPeople dataset due to license problem. You can follow the same process for the different human 3D scan dataset.
+### Render normal maps
+Please checkout [THuman2.0](https://github.com/ytrock/THuman2.0-Dataset) for getting 3D scans and SMPL-X parameters of THuman 2.0 dataset. Then please organize the data folder as following.
+```
+./data/
+├── thuman/
+│   └── scans/
+│       └── 0000/
+│           └── 0000.obj
+│           └── material0.mtl
+│           └── material0.jpeg
+│       └── 0001/
+│       └── ...
+│   └── smplx/
+│       └── 0000.pkl
+│       └── 0001.pkl
+│       └── ...
+```
+
+Then, please running following script to render the normal maps of 3D scans and fitted SMPL-X meshes.
+```
+bash scripts/render_dataset.sh thuman train
+bash scripts/render_dataset.sh thuman test
+```
+You will have the following tree.
+```
+./data/
+├── thuman/
+│   └── render/
+│       └── train/
+│           └── 0000
+│               └── normal_F
+│                   └── 000.png
+│                   └── 010.png
+│                   └── ...
+│                   └── 350.png
+│               └── normal_face_F
+│                   └── ...
+│               └── T_normal_F
+│                   └── ...
+│               └── T_normal_face_F
+│                   └── ...
+│       └── test/
+│           └── 0473
+│               └── ...
+```
+`T_*` indicates rendering of SMPL-X. `normal_F` and `T_normal_F` will be used for training body normal map diffusion model, and `normal_face_F` and `T_normal_face_F` will be used for training face normal map diffusion model.
+### Train a diffusion model with normal maps.
+To train diffusion model with normal maps, please run the training code as below.
+```
+python src/ldm/main.py --base src/ldm/configs/thuman.yaml -t --device "${DEVICE IDs}"  # body diffusion
+python src/ldm/main.py --base src/ldm/configs/thuman_face.yaml -t --device "${DEVICE IDs}"  # face diffusion
+```
+If you don't want to refine the mesh with zooming the face region, you may train only the body diffusion model. In this case, you should add `chupa.use_closeup=false` at the end when running the inference code. 
+
+The training result will be saved under `src/ldm/logs`. Please move the desired checkpoint and config file (`configs/*-project.yaml`) to `checkpoints/normal_ldm` folder. Please refer to the pretrained model instruction below for the directory structure.
+
 ### Pretrained Model
-At the moment, you can get the pretrained checkpoints by running the commands below.
+At the moment, you can get the pretrained checkpoints by running the commands below. (23/12/18 the text model checkpoint was updated.)
 The checkpoints include autoencoder checkpoints from [Latent Diffusion Model](https://github.com/CompVis/latent-diffusion).
 ```
-gdown https://drive.google.com/uc?id=1TX0GIMtWKOa-HJ2CILGheV0zX-RSp8LG  # Models for dual normal map generation
+gdown https://drive.google.com/uc?id=1N1n9MWdnrNANFZvwaCRx7oyX8LPnIteu  # Models for dual normal map generation
 unzip checkpoints.zip && rm checkpoints.zip
 mkdir checkpoints/autoencoder/vq-f4-c3 && cd checkpoints/autoencoder/vq-f4-c3
 wget https://ommer-lab.com/files/latent-diffusion/vq-f4.zip  # Autoencoder checkpoint from latent diffusion
@@ -97,7 +154,7 @@ python scripts/chupa.py configs/random.yaml
 ```
 Specify a subject in dataset
 ```
-python scripts/chupa.py configs/random.yaml dataset subject=rp_ben_posed_001
+python scripts/chupa.py configs/random.yaml dataset dataset.subject=rp_ben_posed_001
 ``` 
 
 #### Text-guided generation
@@ -112,13 +169,13 @@ If you use this code for your research, please cite our paper:
 
 
 ```
-@misc{kim2023chupa,
-      title={Chupa: Carving 3D Clothed Humans from Skinned Shape Priors using 2D Diffusion Probabilistic Models}, 
-      author={Byungjun Kim and Patrick Kwon and Kwangho Lee and Myunggi Lee and Sookwan Han and Daesik Kim and Hanbyul Joo},
-      year={2023},
-      eprint={2305.11870},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@InProceedings{kim2023chupa,
+    author    = {Kim, Byungjun and Kwon, Patrick and Lee, Kwangho and Lee, Myunggi and Han, Sookwan and Kim, Daesik and Joo, Hanbyul},
+    title     = {Chupa: Carving 3D Clothed Humans from Skinned Shape Priors using 2D Diffusion Probabilistic Models},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2023},
+    pages     = {15965-15976}
 }
 ```
 

@@ -1,0 +1,120 @@
+model:
+  base_learning_rate: 1.0e-06
+  target: ldm.models.diffusion.ddpm.LatentDiffusion
+  params:
+    linear_start: 0.015
+    linear_end: 0.155
+    log_every_t: 25
+    timesteps: 100
+    beta_schedule: linear
+    first_stage_key: normal_dual
+    cond_stage_key: T_normal_F
+    image_size: 128
+    channels: 8
+    concat_mode: true
+    cond_stage_trainable: false
+    monitor: val/loss
+    unet_config:
+      target: ldm.modules.diffusionmodules.openaimodel.UNetModel
+      params:
+        image_size: 128
+        in_channels: 12
+        out_channels: 8
+        model_channels: 160
+        attention_resolutions:
+        - 16
+        - 8
+        num_res_blocks: 2
+        channel_mult:
+        - 1
+        - 2
+        - 2
+        - 4
+        num_head_channels: 32
+    first_stage_config:
+      target: ldm.models.autoencoder.VQModelInterface
+      params:
+        embed_dim: 4
+        n_embed: 8192
+        ckpt_path: checkpoints/autoencoder/vq-f4-c4/epoch000999.ckpt
+        ddconfig:
+          double_z: false
+          z_channels: 4
+          resolution: 256
+          in_channels: 4
+          out_ch: 4
+          ch: 128
+          ch_mult:
+          - 1
+          - 2
+          - 4
+          num_res_blocks: 2
+          attn_resolutions: []
+          dropout: 0.0
+        lossconfig:
+          target: torch.nn.Identity
+    cond_stage_config: __is_first_stage__
+data:
+  target: utils.plmodules.data.DataModuleFromConfig
+  params:
+    batch_size: 2
+    num_workers: 4
+    wrap: false
+    train:
+      target: ldm.data.custom.NormalData
+      params:
+        split: train
+        root_path: data/renderpeople
+        keys:
+        - normal
+        - T_normal
+        num_views: 36
+        size: 512
+        img_type: RGBA
+        use_uc_prob: 0.2
+    validation:
+      target: ldm.data.custom.NormalData
+      params:
+        split: test
+        root_path: data/renderpeople
+        keys:
+        - normal
+        - T_normal
+        size: 512
+        img_type: RGBA
+        # use_uc_prob: 0.2
+
+lightning:
+  callbacks:
+    image_logger:
+      target: utils.plmodules.image.ImageLogger
+      params:
+        frequency: 5
+        max_images: 4
+        frequency_type: epoch
+        log_images_kwargs:
+          ddim_steps: null
+          inpaint: False
+    step_ckpt:
+      target: utils.plmodules.checkpoint.CheckpointEveryNEpochs
+      params:
+        save_epoch_frequency: 100
+        use_modelcheckpoint_filename: False
+    # progress:
+    #   target: pytorch_lightning.callbacks.TQDMProgressBar
+    #   params:
+    #     refresh_rate: 50
+
+  modelcheckpoint:
+    filename: epoch{epoch:06}
+    monitor: train/loss
+    save_last: True
+    save_top_k: 3
+
+  trainer:
+    benchmark: true
+    val_check_interval: 1.0
+    check_val_every_n_epoch: 2
+    strategy: ddp_find_unused_parameters_false
+    max_epochs: 500
+    accelerator: gpu

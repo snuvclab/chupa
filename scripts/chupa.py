@@ -226,9 +226,9 @@ class Chupa():
                     use_closeup=None, resample_T_face=0.02, n_resample_face=2):
 
         return self.forward(None, input_image, None, seed, steps, cfg_scale, image_cfg_scale,
-                    use_text, prompt, negative_prompt, 
                     use_resample, resample_T, n_resample, 
-                    use_closeup, resample_T_face, n_resample_face)
+                    use_closeup, resample_T_face, n_resample_face,
+                    use_text, prompt, negative_prompt )
 
     def forward(self, smpl_param_path=None, input_image=None, subject=None, seed=None,
                 steps=20, cfg_scale=2.0, image_cfg_scale=1.5,
